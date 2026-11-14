@@ -19,7 +19,7 @@ Programa que imprime algunas figuras con las caracteristicas indicadas.
 Juego del gato de 2 jugadores, donde el objetivo es conseguir 3 en raya.
 
 ### Ordenamientos
-Programa que muestra de manera graficas como funcionan los distintos algoritmos
+Programa que muestra de manera grafica como funcionan los distintos algoritmos
 de ordenamiento.
 
 ### PromedioAlumnos
