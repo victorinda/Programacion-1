@@ -4,6 +4,8 @@
 import numpy as np
 import random as rand
 
+JUGADORES = ("O", "X")
+
 # ---------------------------------------------------------------
 
 def movercursor_inicio() -> None:
@@ -25,9 +27,9 @@ def mostrar_tablero(tab) -> None:
         raise ValueError("Forma invalida para tab, se esperaba un arreglo 3x3")
     
     print(f" {tab[0,0]} │ {tab[0,1]} │ {tab[0,2]} ")
-    print(f"───┼───┼───")
+    print("───┼───┼───")
     print(f" {tab[1,0]} │ {tab[1,1]} │ {tab[1,2]} ")
-    print(f"───┼───┼───")
+    print("───┼───┼───")
     print(f" {tab[2,0]} │ {tab[2,1]} │ {tab[2,2]} ")
 
 # ---------------------------------------------------------------
@@ -54,42 +56,16 @@ def escribir_tablero(tab, turno, cas) -> bool:
         raise ValueError("Forma invalida para tab, se esperaba un arreglo 3x3")
     if not isinstance(turno, str):
         raise TypeError("Tipo invalido para turno, se esperaba un str")
-    if turno not in ["O", "X"]:
+    if turno not in JUGADORES:
         raise ValueError("Valor invalido para turno, se esperaba 'O' o 'X'")
     if not isinstance(cas, int):
         raise TypeError("Tipo invalido para cas, se esperaba un entero")
+    if cas < 1 or cas > 9:
+        raise ValueError("Valor invalido para cas, se esperaba un valor entre [1,9]")
     
     # Encontrar los indices segun la casilla indicada.
-    match cas:
-        case 1:
-            i = 0
-            j = 0
-        case 2:
-            i = 0
-            j = 1
-        case 3:
-            i = 0
-            j = 2
-        case 4:
-            i = 1
-            j = 0
-        case 5:
-            i = 1
-            j = 1
-        case 6:
-            i = 1
-            j = 2
-        case 7:
-            i = 2
-            j = 0
-        case 8:
-            i = 2
-            j = 1
-        case 9:
-            i = 2
-            j = 3
-        case _:
-            raise ValueError("Valor invalido para cas, se esperaba un valor entre [1,9]")
+    i = (cas - 1) // 3
+    j = (cas - 1) % 3
         
     if tab[i, j] not in ["O", "X"]:
         tab[i, j] = turno
@@ -119,49 +95,25 @@ def determinar_ganador(tab, turno) -> bool:
         raise ValueError("Forma invalida para tab, se esperaba un arreglo 3x3")
     if not isinstance(turno, str):
         raise TypeError("Tipo invalido para turno, se esperaba un str")
-    if turno not in ["O", "X"]:
+    if turno not in JUGADORES:
         raise ValueError("Valor invalido para turno, se esperaba 'O' o 'X'")
     
     # Checar las filas
-    gano = True
     for fila in tab:
-        for dato in fila:
-            if dato != turno:
-                gano = False
-                break
-    
-    if gano:
-        return True
+        if np.all(fila == turno):
+            return True
             
     # Checar las columnas
-    gano = True
     for columna in tab.T:
-        for dato in columna:
-            if dato != turno:
-                gano = False
-                break
-            
-    if gano:
-        return True
+        if np.all(columna == turno):
+            return True
         
     # Checar la diagonal principal
-    gano = True
-    for dato in np.diag(tab):
-        if dato != turno:
-            gano = False
-            break
-        
-    if gano:
+    if np.all(np.diag(tab) == turno):
         return True
-    
-    # Checar la diagonal secundaria
-    gano = True
-    for dato in np.diag(np.fliplr(tab)):
-        if dato != turno:
-            gano = False
-            break
         
-    if gano:
+    # Checar la diagonal secundaria
+    if np.all(np.diag(np.fliplr(tab)) == turno):
         return True
     
     return False 
@@ -170,11 +122,12 @@ def determinar_ganador(tab, turno) -> bool:
 # Proceso principal  
 # ---------------------------------------------------------------
 
-tablero = np.array([[1,2,3],[4,5,6],[7,8,9]], str)
-turno = rand.choice(["O", "X"])
-turno_sig = "X" if turno == "O" else "O"
+tablero = np.array([[1,2,3],[4,5,6],[7,8,9]], np.str_)
+turno = rand.choice(JUGADORES)
+turno_sig = "O" if turno == "X" else "X"
 
-while True:
+# Evitar checar si hay ganador en los primeros 4 turnos (apartir del quinto turno es posible determinar un ganador).
+for _ in range(4):
     # Mostrar tablero
     movercursor_inicio()
     mostrar_tablero(tablero)
@@ -182,20 +135,69 @@ while True:
     
     print(f"\nTurno: {turno}")
     
-    casilla = int(input("Elije una posicion: "))
+    # Capturar y validar la casilla
+    while True:
+        try:
+            casilla = int(input("Elije una posicion: "))
+            if 1 <= casilla <= 9:
+                break
+            print("Casilla invalida...")
+        except ValueError:
+            print("Error: El valor debe ser un entero")
     
     # Verificar que la casilla este desocupada
     exito = escribir_tablero(tablero, turno, casilla) 
     while not exito:
         print("Esa casilla ya esta ocupada...")
-        casilla = int(input("Elije una posicion: "))
+        casilla = int(input("Elije una posicion:  \b"))
+        exito = escribir_tablero(tablero, turno, casilla)
+       
+    # Cambiar de turno
+    turno, turno_sig = turno_sig, turno
+    
+num_turnos = 4
+    
+while num_turnos < 9:
+    # Mostrar tablero
+    movercursor_inicio()
+    mostrar_tablero(tablero)
+    
+    
+    print(f"\nTurno: {turno}")
+    
+    # Capturar y validar la casilla
+    while True:
+        try:
+            casilla = int(input("Elije una posicion: "))
+            if 1 <= casilla <= 9:
+                break
+            print("Casilla invalida...")
+        except ValueError:
+            print("Error: El valor debe ser un entero")
+    
+    # Verificar que la casilla este desocupada
+    exito = escribir_tablero(tablero, turno, casilla) 
+    while not exito:
+        print("Esa casilla ya esta ocupada...")
+        casilla = int(input("Elije una posicion:  \r"))
         exito = escribir_tablero(tablero, turno, casilla)
     
     # Determinar si hay ganador
     if determinar_ganador(tablero, turno):
-        print(f"Ganaron las {turno}!")
+        movercursor_inicio()
+        mostrar_tablero(tablero)
+        
+        print(f"\n=====================================\n=========== GANARON LAS {turno} ===========\n=====================================")
         break
     
     # Cambiar de turno
     turno, turno_sig = turno_sig, turno
     
+    num_turnos += 1
+   
+# Verificar si hubo empate
+if num_turnos == 9:
+    movercursor_inicio()
+    mostrar_tablero(tablero)
+        
+    print("\n====================================\n=========== GANO EL GATO ===========\n====================================")
