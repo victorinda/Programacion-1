@@ -3,6 +3,8 @@
 
 import numpy as np, time, os
 
+# Configuracion
+
 VALOR_MIN = 1
 VALOR_MAX = 15
 RETRASO = 0.2
@@ -104,18 +106,22 @@ while True:
             break
     except ValueError:
         print("Error: El valor debe ser un entero")
-        
+
+# Mostrar arreglo desordenado
 nums = np.random.randint(VALOR_MIN, VALOR_MAX+1, size=n)
 mostrar_barras(nums)
 
+# Ordenamiento por burbuja
 input("Presione <ENTER> para comenzar con el ordenamiento por burbuja... ")
 os.system("cls")
 ord_burbuja(np.copy(nums))
 
+# Ordenamiento por insercion
 input("Presione <ENTER> para comenzar con el ordenamiento por insercion... ")
 os.system("cls")
 ord_insercion(np.copy(nums))
 
+# Ordenamiento por seleccion
 input("Presione <ENTER> para comenzar con el ordenamiento por seleccion... ")
 os.system("cls")
 ord_seleccion(np.copy(nums))

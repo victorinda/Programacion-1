@@ -175,6 +175,7 @@ turno = rand.choice(["O", "X"])
 turno_sig = "X" if turno == "O" else "O"
 
 while True:
+    # Mostrar tablero
     movercursor_inicio()
     mostrar_tablero(tablero)
     
@@ -183,15 +184,18 @@ while True:
     
     casilla = int(input("Elije una posicion: "))
     
+    # Verificar que la casilla este desocupada
     exito = escribir_tablero(tablero, turno, casilla) 
     while not exito:
         print("Esa casilla ya esta ocupada...")
         casilla = int(input("Elije una posicion: "))
         exito = escribir_tablero(tablero, turno, casilla)
-        
+    
+    # Determinar si hay ganador
     if determinar_ganador(tablero, turno):
         print(f"Ganaron las {turno}!")
         break
     
+    # Cambiar de turno
     turno, turno_sig = turno_sig, turno
     
