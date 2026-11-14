@@ -26,5 +26,5 @@ de ordenamiento.
 Programa que captura el nombre y calificación de distintos alumnos, y al final
 indica su promedio general e indica los que obtuvieron calificaciones sobresalientes.
 
-## FechaNac
+### FechaNac
 Programa que captura y valida tu fecha de nacimiento, luego la imprime con el formato: yy/mm/dd.
