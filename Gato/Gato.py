@@ -122,6 +122,7 @@ def determinar_ganador(tab, turno) -> bool:
 # Proceso principal  
 # ---------------------------------------------------------------
 
+# Configuracion inicial del juego
 tablero = np.array([[1,2,3],[4,5,6],[7,8,9]], np.str_)
 turno = rand.choice(JUGADORES)
 turno_sig = "O" if turno == "X" else "X"

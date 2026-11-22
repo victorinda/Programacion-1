@@ -28,3 +28,9 @@ indica su promedio general e indica los que obtuvieron calificaciones sobresalie
 
 ### FechaNac
 Programa que captura y valida tu fecha de nacimiento, luego la imprime con el formato: yy/mm/dd.
+
+## Ejecucion del programa
+
+### Gato
+Crea un arreglo bidimensional y mediante un prompt donde proporcionas un numero, marca la casilla
+indicada.
